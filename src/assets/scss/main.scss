@@ -1,0 +1,61 @@
+@import "./_variables.scss";
+@import "./_utilities.scss";
+@import "./_fonts.scss";
+@import "./_animations.scss";
+
+:root {
+  --fw: 400;
+}
+
+body {
+  overscroll-behavior: none;
+  image-rendering: pixelated;
+  user-select: none;
+
+  font-family: "JetBrains Mono", monospace;
+  font-optical-sizing: auto;
+  font-weight: var(--fw);
+  font-style: normal;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--bs-page);
+}
+
+main {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+a {
+  text-decoration: none;
+}
+
+
+.cursor-holding {
+  // transform: scale(1.2);
+  // filter: drop-shadow(0px 0px 5px white);
+  padding: 5px;
+}
+
+.cursor-over-drop {
+  padding: 10px;
+  filter: drop-shadow(0px 0px 5px var(--bs-info));
+  transform: scale(1.5);
+  transition: transform .1s cubic-bezier(0.175, 0.885, 0.32, 1.5);
+}
+
+.flipped {
+  transform: scaleX(-1);
+}
+
+.character-img {
+  img {
+    height: 200px;
+  }
+}

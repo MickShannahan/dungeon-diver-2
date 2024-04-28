@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Jacquard+24&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+
+:root {
+  --fw: 400;
+}
+
+.f-mono {
+  font-family: "JetBrains Mono", monospace;
+  font-optical-sizing: auto;
+  font-weight: var(--fw);
+  font-style: normal;
+}
+
+.f-jacquard {
+  font-family: "Jacquard 24", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
