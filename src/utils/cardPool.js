@@ -2,11 +2,12 @@ import { Action } from "../models/Action.js"
 import { Card } from "../models/Card.js"
 
 export function starterDeck() {
-  let cards = cardPool.slice(0, 4)
+  let cards = cardPool.slice(0, 3)
   let out = [...cards]
   cards.forEach(c =>
     out.unshift(new Card(c))
   )
+  out.unshift(cardPool[3])
   return out
 }
 
@@ -45,7 +46,7 @@ export const cardPool = [
     actions: [
       new Action({
         name: 'potion',
-        power: 5,
+        power: 3,
         action: 'healPlayer',
         type: 'other',
         description: 'heal player by {{power}}'

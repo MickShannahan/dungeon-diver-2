@@ -1,17 +1,18 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import { loadState } from './utils/Store.js';
-import { GameSave } from './models/GameSave.js';
-import { AppState } from './AppState.js';
-import { monstersService } from './services/MonstersService.js';
 import { gameService } from './services/GameService.js';
+import { logger } from './utils/Logger.js';
 
 
 onMounted(()=>{
-  document.body.addEventListener('contextmenu', (e)=> e.preventDefault())
-  document.body.addEventListener('dragstart', (e)=> e.preventDefault())
+  try {
+    document.body.addEventListener('contextmenu', (e)=> e.preventDefault())
+    document.body.addEventListener('dragstart', (e)=> e.preventDefault())
 
-  gameService.startNewRun()
+    gameService.startNewRun()
+  } catch (error) {
+    logger.error(error)
+  }
 })
 
 const cardHeight= ref('27ch')

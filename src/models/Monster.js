@@ -1,4 +1,6 @@
+import { rpsOutcomes } from "../services/MonstersService.js";
 import { startingAttackPool } from "../utils/attackPool.js";
+import { logger } from "../utils/Logger.js";
 import { randomArr } from "../utils/Random.js";
 import { Action } from "./Action.js";
 import { Character } from "./Character.js";
@@ -23,6 +25,18 @@ export class Monster extends Character {
 
   }
 
+  calcDamage(attack) {
+    const currentAction = this.actions[0]
+    if (!currentAction) return 'no action'
+    if (attack.type == currentAction.type) {
+      return currentAction.power - attack.power
+    }
+    if (rpsOutcomes[attack.type].includes(currentAction.type)) {
+      return attack.power
+    }
+    return 0
+  }
+
 
   addAction() {
     switch (this.actionType) {
@@ -36,4 +50,22 @@ export class Monster extends Character {
     }
   }
 
+  removeCurrentAction() {
+    let act = this.actions.shift()
+  }
+
+  prepareActions() {
+    logger.log('prepare Actions')
+    this.actions = []
+    let count = this.actionCount
+    while (count--) {
+      setTimeout(() => {
+        this.addAction()
+      }, 350 * this.actionCount - count)
+    } (count)
+  }
+
+  get isAlive() {
+    return this.health > 0
+  }
 }

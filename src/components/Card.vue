@@ -1,29 +1,31 @@
 <script setup>
-import { ref } from 'vue';
-import App from '../App.vue';
+import { computed, ref } from 'vue';
 import { AppState } from '../AppState.js';
 import { Card } from '../models/Card.js';
 import { logger } from '../utils/Logger.js';
 import { animate } from '../utils/animate.js';
 import { playSFX } from '../utils/soundController.js';
 import fail from '../assets/sounds/fail.wav'
-import { gameService } from '../services/GameService.js';
 
 
 const {card: cardProp} = defineProps({card: Card})
+const currentMonsterAction = computed(()=> AppState.currentMonster?.actions[0])
+const currentDamage = computed(()=>{
+  return AppState.currentMonster?.calcDamage(cardProp)
+})
 const image = ref(null)
 const cardRef = ref(null)
 const holding = ref(false)
 const preview = ref(false)
 
 function pickup(e){
-  logger.log('⬆️', cardProp.name)
+  // logger.log('⬆️', cardProp.name)
   holding.value = true
   AppState.cardInHand = cardProp
 }
 
 function drop(e){
-  logger.log('⬆⬇️', cardProp.name)
+  // logger.log('⬇️', cardProp.name)
   holding.value = false
   AppState.cardInHand = null
 if(AppState.player.energy < cardProp.cost) return failToPlay()
@@ -34,14 +36,22 @@ function playCard(){
 }
 
 function failToPlay(){
-  animate(cardRef.value, 'shakeX', .5, 'linear')
+  animate(cardRef.value, 'shakeX', '.5s', 'linear')
   playSFX(fail)
 }
 </script>
 
 
 <template>
-  <img ref="image" class="preview-img"  :src="card.picture" :alt="`image of ${card.name}`">
+  <div ref="image" class="preview-img text-center">
+    <img :src="card.picture" :alt="`image of ${card.name}`">
+    <div v-if="currentDamage != '' && card.type != 'other'">
+      <i class="mdi mdi-sword"></i>{{ Math.abs(currentDamage) }}
+    </div>
+    <div v-else>
+      <small>{{card.description}}</small>
+    </div>
+  </div>
 
  <div class="rps-card" ref="cardRef" :class="{active: holding}" v-pickup="{pickup, drop, dragElm: image, data: card}">
   <div class="img-background" :style="`--bg: url(${card.background})`">
@@ -51,8 +61,9 @@ function failToPlay(){
     <kbd class="bg-danger text-light"><i class="mdi mdi-sword"></i>{{ card.power || 0 }}</kbd><kbd class="bg-primary text-light rounded-pill" :class="{'border border-danger': card.cost > AppState.player.energy}"><i class="mdi mdi-lightning-bolt"></i>{{ card.cost }}</kbd>
   </div>
   <div class="card-body text-center">
-    <p>{{ card.flavor }}</p>
-    <p>{{ card.description }}</p>
+    <div class="tiny-font">{{ card.flavor }}</div>
+    <hr class="my-1">
+    <p class="tiny-font my-1 text-info">{{ card.description }}</p>
   </div>
 </div>
 </template>
@@ -122,8 +133,11 @@ function failToPlay(){
   .preview-img{
     position: fixed;
     // opacity: 0;
-    height: 75px;
-    width: 75px;
+    img{
+      height: 75px;
+      width: 75px;
+    }
   }
+
 
 </style>

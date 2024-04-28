@@ -1,12 +1,23 @@
 <script setup>
+import { computed, ref, watch } from 'vue';
 import { Action } from '../models/Action.js';
+import { animate } from '../utils/animate.js';
+import { logger } from '../utils/Logger.js';
 
-defineProps({action: Action, index: {type: Number, default: 0}})
+const props =defineProps({action: Action, index: {type: Number, default: 0}})
+const animation = computed(()=> props.action.animation)
+const iconRef = ref(null)
+
+watch(animation, async(anime, old)=>{
+  logger.log('animation start', anime)
+  if(anime) await anime.play(iconRef.value)
+  logger.log('animation done', anime)
+})
 </script>
 
 
 <template>
-  <div class="action-icon" :title="action.description" :class="{smaller: index !=0 && !action.triggered, triggered: action.triggered}">
+  <div ref="iconRef" class="action-icon" :title="action.description" :class="{smaller: index !=0 && !action.triggered}">
     <img :src="action.picture" alt="">
     <div :class="{'text-warning': index == 0}" class="rounded-circle">{{ action.power }}</div>
   </div>

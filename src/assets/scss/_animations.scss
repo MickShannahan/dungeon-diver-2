@@ -67,6 +67,21 @@
   }
 }
 
+@keyframes drop-down {
+  0% {
+    transform: translateY(0%);
+  }
+
+  50% {
+    transform: translateY(100%);
+  }
+
+  100% {
+    transform: translateY(0%);
+  }
+
+}
+
 @keyframes grow {
   0% {
     transform: scale(1);
@@ -204,5 +219,22 @@
   100% {
     opacity: 0;
     transform: translate(-1000%, 300%);
+  }
+}
+
+@keyframes card-flip {
+  0% {
+    opacity: 0;
+    transform: translateY(-50px) rotateY(90deg);
+  }
+
+  25% {
+    opacity: .25;
+    transform: translateY(-50px) rotateY(45deg);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0px) rotateY(0deg);
   }
 }

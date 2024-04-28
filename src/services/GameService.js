@@ -23,6 +23,7 @@ class GameService {
   }
 
   activateCombo() {
+    if (!AppState.currentMonster) return
     setTimeout(() => {
       monstersService.monsterPrepareTurn()
     }, 1000)
@@ -63,12 +64,10 @@ class GameService {
     return new Promise((resolve, reject) => {
       player.discard.forEach((card, i) => {
         setTimeout(() => {
-          logger.log(card)
           player.deck.push(card)
         }, 100 * i)
       })
       setTimeout(() => {
-        logger.log('done reshuffling')
         player.discard.length = 0
         resolve()
       }, 100 * player.discard.length)

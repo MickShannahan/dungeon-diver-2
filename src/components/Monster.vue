@@ -21,12 +21,12 @@ const monsterImage = ref(null)
 watch(monsterHealth, (newHealth, oldHealth)=>{
   logger.log(oldHealth, newHealth)
   if(oldHealth > newHealth){
-    animate(monsterImage.value, 'flash-shake', .5, 'linear')
+    animate(monsterImage.value, 'flash-shake', '.5s', 'linear')
     playSFX(hurt)
     if(newHealth <= 0)monsterDied()
   }
   if(oldHealth< newHealth){
-    animate(monsterImage.value, 'grow', .5, 'cubic-bezier(0.175, 0.885, 0.32, 1.5)')
+    animate(monsterImage.value, 'grow', '.5s', 'cubic-bezier(0.175, 0.885, 0.32, 1.5)')
     playSFX(heal)
     if(newHealth > monster.value.maxHealth) AppState.currentMonster.health = AppState.currentMonster.maxHealth
   }
@@ -44,7 +44,7 @@ function carPlayed(event, card){
 }
 
 function monsterDied(){
-  animate(monsterImage.value, 'dead', .5, 'linear')
+  animate(monsterImage.value, 'dead', '.5s', 'linear')
   playSFX(flyAway)
   setTimeout(()=> monstersService.monsterDied(), 600)
 
@@ -62,7 +62,7 @@ function monsterDied(){
       <img v-drop="carPlayed" class="img-fluid" :style="{animation: 'bounce 1.2s ease-out infinite', transformOrigin: 'bottom'}" :src="monster.picture" >
     </div>
     <div>
-      <div class="fs-4 text-end">{{ monster.name }}</div>
+      <div class="fs-4 text-end f-jacquard-i">{{ monster.name }}</div>
       <HealthBar :currentHealth="monster.health" :maxHealth="monster.maxHealth" :block="25" color="warning" :direction="'right'"/>
     </div>
   </section>
@@ -72,7 +72,7 @@ function monsterDied(){
 <style lang="scss" scoped>
 .grid{
   position: relative;
-  padding: 4em;
+  padding: 2vw;
   display: grid;
   place-content: center;
   width: 100%;

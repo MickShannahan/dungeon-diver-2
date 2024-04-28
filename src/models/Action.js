@@ -1,4 +1,5 @@
 import { logger } from "../utils/Logger.js"
+import { Animation } from "./Animation.js"
 
 
 export class Action {
@@ -10,7 +11,8 @@ export class Action {
    * type: ('rock'| 'paper'| 'scissors'| 'other')
    * picture?: string,
    * description?: string,
-   * arguments?: [*]
+   * arguments?: [*],
+   * animation?: Animation
    * }} data
    */
   constructor(data) {
@@ -22,14 +24,13 @@ export class Action {
     this.description = data.description || `${this.name} for {{power}}`
     this.arguments = data.arguments || []
     this.triggered = false
-    logger.log(this)
+    this.animation = data.animation
   }
 
   get tooltip() {
     let tip = this.description
     const reg = /(?<=\{\{)(\w+)(?=\}\})/g
     const replaces = this.description.match(reg)
-    logger.log('replacing', replaces, this.description)
     replaces.forEach(r => tip = tip.replace(new RegExp(`{{${r}}}`, 'g'), this[r]))
     return tip
   }

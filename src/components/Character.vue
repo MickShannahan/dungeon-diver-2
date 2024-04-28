@@ -30,11 +30,11 @@ watch(energy, (newE, oldE)=>{
 
 watch(health, (newHealth, oldHealth)=>{
   if(oldHealth > newHealth){
-    animate(playerImg.value, 'flash-shake', '.5s .1', 'linear')
+    animate(playerImg.value, 'flash-shake', '.5s' , 'linear', '.1s')
     playSFX(hurt)
   }
   if(oldHealth < newHealth){
-    animate(playerImg.value, 'green-grow', '.5s .1', 'linear')
+    animate(playerImg.value, 'green-grow', '.5s', 'linear', '.1s')
     playSFX(heal)
   }
 })
@@ -56,7 +56,7 @@ function playCard(event, card){
     </div>
 
     <div class="w-100">
-      <div class="fs-4">{{ player.name }}</div>
+      <div class="fs-4 f-jacquard-i">{{ player.name }}</div>
       <HealthBar :currentHealth="player.health" :maxHealth="player.maxHealth" :block="25" color="success"/>
     </div>
 
@@ -70,7 +70,7 @@ function playCard(event, card){
 
 <style lang="scss" scoped>
 .grid{
-  padding: 4em;
+  padding: 2vw;
   display: grid;
   place-content: center;
   width: 100%;

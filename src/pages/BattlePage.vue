@@ -25,10 +25,10 @@ onMounted(()=>{
   <main >
     <div class="container">
       <section class="row justify-content-center">
-        <div class="col-6 col-lg-5 p-5">
+        <div class="col-6 col-lg-5 px-5 py-3">
           <Character/>
         </div>
-        <div class="col-6 col-lg-5 p-5">
+        <div class="col-6 col-lg-5 px-5 py-3">
           <Monster/>
         </div>
       </section>
@@ -41,7 +41,7 @@ onMounted(()=>{
 <style lang="scss" scoped>
 main{
   overflow: hidden;
-  padding: 25px;
+  padding: 25px 0px;
   align-items: end;
   background-image: url('src/assets/img/bgs/cave.jpg');
   background-position: bottom;
