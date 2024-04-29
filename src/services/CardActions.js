@@ -23,6 +23,14 @@ class CardActions {
     logger.log('hurMonster')
   }
 
+  deckToHand(number) {
+    gameService.addCardsToHand(number)
+  }
+
+  addAbilityPower() {
+    logger.log('addAbilityPower')
+  }
+
 }
 
 
