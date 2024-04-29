@@ -1,3 +1,4 @@
+import { createId } from "../utils/GenerateId.js"
 import { logger } from "../utils/Logger.js"
 import { Animation } from "./Animation.js"
 
@@ -17,6 +18,7 @@ export class Action {
    */
   constructor(data) {
     this.action = data.action
+    this.id = createId(data.action)
     this.type = data.type || 'other'
     this.power = data.power || 0
     this.name = data.name

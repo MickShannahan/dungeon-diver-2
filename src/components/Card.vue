@@ -16,7 +16,6 @@ const currentDamage = computed(()=>{
 const image = ref(null)
 const cardRef = ref(null)
 const holding = ref(false)
-const preview = ref(false)
 
 function pickup(e){
   // logger.log('⬆️', cardProp.name)
@@ -43,29 +42,35 @@ function failToPlay(){
 
 
 <template>
-  <div ref="image" class="preview-img text-center">
-    <img :src="card.picture" :alt="`image of ${card.name}`">
-    <div v-if="currentDamage != '' && card.type != 'other'">
-      <i class="mdi mdi-sword"></i>{{ Math.abs(currentDamage) }}
+   <div ref="image" class="preview-img text-center">
+      <img :src="card.picture" :alt="`image of ${card.name}`">
+      <div v-if="currentDamage != '' && card.type != 'other'">
+        <i class="mdi mdi-sword"></i>{{ Math.abs(currentDamage) }}
+      </div>
+      <div v-else>
+        <small>{{card.description}}</small>
+      </div>
     </div>
-    <div v-else>
-      <small>{{card.description}}</small>
-    </div>
-  </div>
 
- <div class="rps-card" ref="cardRef" :class="{active: holding}" v-pickup="{pickup, drop, dragElm: image, data: card}">
-  <div class="img-background" :style="`--bg: url(${card.background})`">
-    <img  :src="card.picture" :alt="`image of ${card.name}`">
-  </div>
-  <div class="power-cost-bar">
-    <kbd class="bg-danger text-light"><i class="mdi mdi-sword"></i>{{ card.power || 0 }}</kbd><kbd class="bg-primary text-light rounded-pill" :class="{'border border-danger': card.cost > AppState.player.energy}"><i class="mdi mdi-lightning-bolt"></i>{{ card.cost }}</kbd>
-  </div>
-  <div class="card-body text-center">
-    <div class="tiny-font">{{ card.flavor }}</div>
-    <hr class="my-1">
-    <p class="tiny-font my-1 text-info">{{ card.description }}</p>
-  </div>
-</div>
+    <div class="rps-card" ref="cardRef" :class="{active: holding}"
+      v-pickup="{pickup, drop, dragElm: image, data: card}">
+      <div class="img-background" :style="`--bg: url(${card.background})`">
+        <img :src="card.picture" :alt="`image of ${card.name}`">
+      </div>
+      <div class="power-cost-bar">
+        <kbd class="bg-danger text-light rounded-pill"><i class="mdi mdi-sword"></i>{{ card.power || 0 }}</kbd><kbd
+          class="bg-primary text-light" :class="{'border border-danger': card.cost > AppState.player.energy}"><i
+            class="mdi mdi-lightning-bolt"></i>{{ card.cost }}</kbd>
+      </div>
+      <div class="card-body text-center">
+        <div class="tiny-font">{{ card.flavor }}</div>
+        <hr class="my-1">
+        <p class="tiny-font my-1 text-info">{{ card.description }}</p>
+      </div>
+    </div>
+
+
+
 </template>
 
 
@@ -74,6 +79,7 @@ function failToPlay(){
   $card-padding: 6px;
 
   .rps-card{
+    position: relative;
     font-size: 13px;
     height: var(--card-height);
     aspect-ratio: 3/4;
@@ -82,7 +88,7 @@ function failToPlay(){
     border-radius:$card-radius;
     outline: 3px double var(--bs-light);
     outline-offset: -4px;
-    margin-inline: -4px;
+    margin-inline: max(-5px, -4vw);
     padding: $card-padding;
     transition: all .2s cubic-bezier(0.175, 0.885, 0.32, 1.75);
     cursor: grab;
@@ -132,10 +138,12 @@ function failToPlay(){
 
   .preview-img{
     position: fixed;
+    --march-height: 5px;
     // opacity: 0;
     img{
-      height: 75px;
-      width: 75px;
+      height: 50px;
+      width: 50px;
+      object-fit: contain;
     }
   }
 

@@ -1,4 +1,5 @@
 import { Monster } from "../models/Monster.js";
+import { pool2 } from "./attackPool.js";
 
 
 export const monsterPool = [
@@ -21,21 +22,29 @@ export const monsterPool = [
   new Monster({
     name: 'Georgie',
     picture: 'src/assets/img/characters/Georgie 2.png',
-    health: 18
+    actionCount: 2,
+    health: 18,
+    actionPool: pool2
   }),
   new Monster({
     name: 'Kiwi',
     picture: 'src/assets/img/characters/KiwiPlush.png',
-    health: 20
+    actionCount: 2,
+    health: 20,
+    actionPool: pool2
   }),
   new Monster({
     name: 'Robert',
     picture: 'src/assets/img/characters/DuckHat.png',
-    health: 22
+    actionCount: 2,
+    health: 22,
+    actionPool: pool2
   }),
   new Monster({
     name: 'Snips',
     picture: 'https://em-content.zobj.net/source/twitter/348/crab_1f980.png',
-    health: 25
+    actionCount: 2,
+    health: 25,
+    actionPool: pool2
   })
 ]

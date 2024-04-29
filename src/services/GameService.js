@@ -6,8 +6,21 @@ import { logger } from "../utils/Logger.js"
 import { monsterPool } from "../utils/monsterPool.js"
 import { cardActions } from "./CardActions.js"
 import { monstersService } from "./MonstersService.js"
+import { delay } from "../utils/delay.js"
+import { Animation } from "../models/Animation.js"
 
 class GameService {
+  discardCard(card) {
+    const player = AppState.player
+    let removed = player.hand.splice(player.hand.indexOf(card), 1)[0]
+    player.discard.push(removed)
+    this.restoreEnergy(1)
+  }
+  burnCard(card) {
+    const player = AppState.player
+    player.hand.splice(player.hand.indexOf(card), 1)
+  }
+
   healPlayer(health) {
     const player = AppState.player
     player.health += health
@@ -18,15 +31,39 @@ class GameService {
     if (AppState.player.energy > AppState.player.maxEnergy) AppState.player.energy = AppState.player.maxEnergy
   }
 
+  resetAbilityPower() {
+    const player = AppState.player
+    player.abilityAnimation = new Animation('flash-shake', .5, 'linear', 0, () => {
+      player.abilityPower = 0
+    })
+  }
+
   passTurn() {
+    gameService.reshuffleDiscard()
     monstersService.monsterTakeTurn()
   }
 
-  activateCombo() {
+  playerTurnEnd() {
     if (!AppState.currentMonster) return
     setTimeout(() => {
-      monstersService.monsterPrepareTurn()
-    }, 1000)
+      if (AppState.player.energy <= 0) {
+        monstersService.monsterTakeTurn()
+        this.resetAbilityPower()
+      }
+    }, 500)
+  }
+
+  async activatePlayerAbility() {
+    const abilityPower = AppState.player.abilityPower || 0
+    if (!abilityPower) return
+    await delay(100)
+    AppState.player.abilityAnimation = new Animation('ability-right', .2, 'linear')
+    await delay(200)
+    monstersService.damageCurrentMonster(abilityPower)
+    AppState.player.abilityPower = 0
+    monstersService.monsterPrepareTurn()
+
+    await delay(500)
   }
 
   /** @param {Card} card */
@@ -37,9 +74,7 @@ class GameService {
     const indexToRemove = AppState.player.hand.indexOf(card)
     AppState.player.hand.splice(indexToRemove, 1)
     AppState.player.discard.unshift(card)
-    if (AppState.player.hand.length <= 0) {
-      this.drawNewHand()
-    }
+
     if (card.type != 'other') {
       return card.power
     }
@@ -51,16 +86,22 @@ class GameService {
 
   async addCardsToHand(num) {
     logger.log('adding cards', num)
-    while (--num + 1) {
-      if (AppState.player.maxHandSize <= AppState.player.hand.length) return
-      const card = AppState.player.deck.shift()
-      if (!card) return await this.reshuffleDiscard()
-      AppState.player.hand.push(card)
-    } (num)
+    // eslint-disable-next-line no-async-promise-executor
+    return new Promise(async (resolve, reject) => {
+      while (num--) {
+        setTimeout(() => {
+          const card = AppState.player.deck.shift()
+          if (!card) return
+          AppState.player.hand.push(card)
+          resolve()
+        }, 100 * num)
+      } (num)
+    })
   }
   reshuffleDiscard() {
     logger.log('reshuffling')
     const player = AppState.player
+    this.resetAbilityPower()
     return new Promise((resolve, reject) => {
       player.discard.forEach((card, i) => {
         setTimeout(() => {

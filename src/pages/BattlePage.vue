@@ -23,12 +23,12 @@ onMounted(()=>{
 
 <template>
   <main >
-    <div class="container">
+    <div class="container-md">
       <section class="row justify-content-center">
-        <div class="col-6 col-lg-5 px-5 py-3">
+        <div class="col-6 col-lg-5 px-3 px-lg-5 py-3">
           <Character/>
         </div>
-        <div class="col-6 col-lg-5 px-5 py-3">
+        <div class="col-6 col-lg-5 px-3 px-lg-5 py-3">
           <Monster/>
         </div>
       </section>
@@ -44,7 +44,7 @@ main{
   padding: 25px 0px;
   align-items: end;
   background-image: url('src/assets/img/bgs/cave.jpg');
-  background-position: bottom;
-  background-size: cover;
+  background-position: 100% 400%;
+  background-repeat: no-repeat;
 }
 </style>

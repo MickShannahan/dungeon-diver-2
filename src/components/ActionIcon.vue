@@ -9,9 +9,8 @@ const animation = computed(()=> props.action.animation)
 const iconRef = ref(null)
 
 watch(animation, async(anime, old)=>{
-  logger.log('animation start', anime)
+  logger.log('animationPlay')
   if(anime) await anime.play(iconRef.value)
-  logger.log('animation done', anime)
 })
 </script>
 

@@ -18,8 +18,12 @@ const monsterHealth = computed(()=> AppState.currentMonster?.health)
 const preparedAttacks = computed(()=> AppState.currentMonster?.actions)
 const monsterImage = ref(null)
 
+const activeDropZone =computed(()=>{
+  if(AppState.currentMonster?.actions[0]) return true
+  return false
+})
+
 watch(monsterHealth, (newHealth, oldHealth)=>{
-  logger.log(oldHealth, newHealth)
   if(oldHealth > newHealth){
     animate(monsterImage.value, 'flash-shake', '.5s', 'linear')
     playSFX(hurt)
@@ -33,7 +37,6 @@ watch(monsterHealth, (newHealth, oldHealth)=>{
 })
 
 /**
- *
  * @param {*} event
  * @param { Card } card
  */
@@ -56,14 +59,14 @@ function monsterDied(){
 <template>
 <section class="grid reveal" v-if="monster">
     <div class="actions-bar">
-      <ActionIcon v-for="(action, i) in preparedAttacks" :action="action" :index="i" :key="i"/>
+      <ActionIcon v-for="(action, i) in preparedAttacks" :action="action" :index="i" :key="action.id"/>
     </div>
     <div class="character-img text-center" ref="monsterImage">
-      <img v-drop="carPlayed" class="img-fluid" :style="{animation: 'bounce 1.2s ease-out infinite', transformOrigin: 'bottom'}" :src="monster.picture" >
+      <img v-drop="carPlayed" :data-drop-zone="activeDropZone" class="img-fluid" :style="{animation: 'bounce 1.2s ease-out infinite', transformOrigin: 'bottom'}" :src="monster.picture" >
     </div>
     <div>
-      <div class="fs-4 text-end f-jacquard-i">{{ monster.name }}</div>
       <HealthBar :currentHealth="monster.health" :maxHealth="monster.maxHealth" :block="25" color="warning" :direction="'right'"/>
+      <div class="fs-4 text-end f-jacquard-i">{{ monster.name }}</div>
     </div>
   </section>
 </template>

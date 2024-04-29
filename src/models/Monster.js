@@ -54,6 +54,10 @@ export class Monster extends Character {
     let act = this.actions.shift()
   }
 
+  removeAction(action) {
+    this.actions.splice(this.actions.indexOf(action), 1)
+  }
+
   prepareActions() {
     logger.log('prepare Actions')
     this.actions = []
@@ -61,11 +65,15 @@ export class Monster extends Character {
     while (count--) {
       setTimeout(() => {
         this.addAction()
-      }, 350 * this.actionCount - count)
+      }, 250 * this.actionCount - count)
     } (count)
   }
 
   get isAlive() {
     return this.health > 0
+  }
+
+  get hasActions() {
+    return !!this.actions.length
   }
 }

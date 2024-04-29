@@ -37,7 +37,7 @@ const cardWidth= ref('20ch')
 
 
 :root{
-  --card-height: 27ch;
-  --card-width: v-bind(cardWidth);
+  --card-height: min(27ch, 25vw);
+  --card-width: min(20ch, 11vw);
 }
 </style>

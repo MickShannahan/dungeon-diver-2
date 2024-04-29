@@ -2,7 +2,12 @@
 import { computed } from 'vue';
 import { AppState } from '../AppState.js';
 
-const props = defineProps({energy: Number, maxEnergy: Number, spending: {type: Number, default: 0}})
+const props = defineProps({
+  energy: Number,
+  maxEnergy: Number,
+  spending: {type: Number, default: 0 },
+  restoring: {type: Number, default: 0}
+  })
 const cardInHand = computed(()=> AppState.cardInHand)
 const energyCost = computed(()=> {
   if(AppState.cardInHand) return AppState.cardInHand.cost
@@ -13,8 +18,8 @@ const energyCost = computed(()=> {
 
 
 <template>
-<section class="h-100 w-100 d-flex flex-wrap">
-  <div v-for="(e, i) in maxEnergy" :key="i" class="energy-bulb" :class="{filled: e <= energy, glow: energyCost >= e}"><i class="mdi mdi-lightning-bolt"></i></div>
+<section class="h-100 w-100 d-flex flex-wrap justify-content-center ">
+  <div v-for="(e, i) in maxEnergy" :key="i" class="energy-bulb" :class="{filled: e <= energy, glow: energyCost >= e  && !restoring, restore: energy + restoring >= e }"><i class="mdi mdi-lightning-bolt"></i></div>
 </section>
 <!-- <div>e{{ energy }}| me{{ maxEnergy }} | ec{{ energyCost }}</div> -->
 </template>
@@ -23,10 +28,11 @@ const energyCost = computed(()=> {
 <style lang="scss" scoped>
   .energy-bulb{
     height: 100%;
+    padding-top: 5px;
     width: 5%;
     min-width: 40px;
     margin-right: 1%;
-    border-radius: 25em;
+    border-radius: 8px;
     border: 1px solid var(--bs-light);
     background-color: transparent;
     transition: all .1s linear;
@@ -37,10 +43,14 @@ const energyCost = computed(()=> {
   }
   .glow:not(.filled){
     border-color: var(--bs-danger);
-    box-shadow: inset 0px 0px 4px var(--bs-danger);
+    box-shadow: inset 0px 0px 8px var(--bs-danger);
     color: var(--bs-danger);
   }
   .filled.glow{
     background-color: var(--bs-warning);
+  }
+  .restore:not(.filled){
+    border-color: var(--bs-success);
+    box-shadow: inset 0px 0px 8px var(--bs-success);
   }
 </style>

@@ -45,6 +45,21 @@
   }
 }
 
+@keyframes march {
+  60% {
+    transform: translateY(0%);
+  }
+
+  80% {
+    transform: translateY(var(--march-height));
+  }
+
+  100% {
+    transform: translateY(0%);
+
+  }
+}
+
 @keyframes mb-bounce {
   0% {
     padding-bottom: 0px;
@@ -219,6 +234,29 @@
   100% {
     opacity: 0;
     transform: translate(-1000%, 300%);
+  }
+}
+
+@keyframes ability-right {
+  0% {
+    opacity: 1;
+    transform: translate(0%, 0%);
+  }
+
+  25% {
+    transform: translate(75%, -75%);
+
+  }
+
+  50% {
+    opacity: 1;
+    transform: translate(200%, -100%);
+
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(700%, 300%);
   }
 }
 

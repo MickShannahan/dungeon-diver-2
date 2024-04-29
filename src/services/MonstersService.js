@@ -23,6 +23,7 @@ class MonstersService {
     logger.log('✨👹', monster)
     if (!monster) return gameService.gotToMap()
     AppState.currentMonster = monster
+    logger.log('spawnNextMonster')
     this.monsterPrepareTurn()
   }
 
@@ -31,26 +32,34 @@ class MonstersService {
   }
 
   monsterTakeTurn() {
+    const monster = AppState.currentMonster
+    if (!monster.isAlive) return
     let actions = AppState.currentMonster.actions
     actions.forEach((a, i) => {
       setTimeout(() => {
-        a.triggered = true
         cardActions[a.action](a)
-        a.animation = new Animation('shoot-left', .3, 'ease', .1)
+        a.animation = new Animation('shoot-left', .3, 'ease', .1, () => {
+          AppState.currentMonster.removeCurrentAction()
+        })
       }, 400 * (i + 1))
     })
     setTimeout(() => {
-      gameService.addCardsToHand(3)
+      // gameService.addCardsToHand(3)
       gameService.restoreEnergy(AppState.player.maxEnergy)
       actions.length = 0
+      logger.log('monsterTakeTurn')
       this.monsterPrepareTurn()
     }, (400 * actions.length) + 300)
   }
 
-  counterActions(card) {
+  async counterActions(card) {
     const monster = AppState.currentMonster
     const action = monster?.actions[0]
-    if (!action) this.monsterPrepareTurn()
+    const currentPower = AppState.player?.abilityPower
+    logger.log('counterActions')
+    if (!action) {
+      this.monsterPrepareTurn()
+    }
 
     if (card.type == action.type) { // ties
       action.power -= card.power
@@ -61,7 +70,9 @@ class MonstersService {
 
     } else if (rpsOutcomes[card.type].includes(action.type)) { // player wins
       action.power -= card.power
-      monster.health -= card.power
+      let dealt = monster.health - card.power > 0 ? card.power : Math.abs(card.power - monster.health - card.power)
+      this.damageCurrentMonster(card.power)
+      AppState.player.abilityPower += dealt
 
     } else { // player loses
       gameService.damagePlayer(1)
@@ -71,15 +82,16 @@ class MonstersService {
         monster.actions.shift()
         monster.actions.push(action)
       }
-
     }
+
+
     if (action.power <= 0) {
       action.power = 0
-      action.animation = new Animation('bounce', .2, 'linear', 0, () => {
-        monster.removeCurrentAction()
-        if (monster?.actions.length == 0) {
-          if (monster.isAlive) gameService.activateCombo()
-        }
+      action.animation = new Animation('bounce', .2, 'linear', 0, async () => {
+        monster.removeAction(action)
+        if (!monster.isAlive) return
+        if (!monster.hasActions && AppState.player.abilityPower && currentPower) await gameService.activatePlayerAbility()
+        else if (!monster.hasActions && AppState.player.energy > 0) this.monsterPrepareTurn()
       })
     }
 
@@ -95,7 +107,11 @@ class MonstersService {
 
   monsterDied() {
     AppState.currentMonster = null
-    setTimeout(() => this.spawnNextMonster(), 100)
+
+    gameService.drawNewHand()
+    setTimeout(() => {
+      this.spawnNextMonster()
+    }, 500)
   }
 
 }

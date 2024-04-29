@@ -7,6 +7,13 @@ const rock = new Action({
   power: 2,
   picture: 'https://em-content.zobj.net/source/huawei/375/rock_1faa8.png'
 })
+const granite = new Action({
+  name: 'Granite',
+  type: 'rock',
+  action: 'hurtPlayer',
+  power: 4,
+  picture: 'https://em-content.zobj.net/source/twitter/348/rock_1faa8.png'
+})
 const paper = new Action({
   name: 'paper cut',
   type: 'paper',
@@ -23,3 +30,6 @@ const scissors = new Action({
 })
 
 export const startingAttackPool = [rock, paper, scissors]
+
+export const pool2 = [...startingAttackPool, granite, granite]
+

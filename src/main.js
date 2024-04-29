@@ -16,7 +16,7 @@ async function init() {
       beforeUnmount: (el, binding) => {
         el.removeEventListener('mousedown', binding.dir.pickupElm)
         el.removeEventListener('mouseup', binding.dir.dropElm)
-        el.remove()
+        // el.remove()
       },
       mounted: customPickup,
       updated: customPickup
