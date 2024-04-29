@@ -73,7 +73,7 @@ class MonstersService {
       action.power -= card.power
       let dealt = monster.health - card.power > 0 ? card.power : Math.abs(card.power - monster.health - card.power)
       this.damageCurrentMonster(card.power)
-      AppState.player.abilityPower += dealt
+      AppState.player.abilityPower += card.cost
 
     } else { // player loses
       gameService.damagePlayer(1)
