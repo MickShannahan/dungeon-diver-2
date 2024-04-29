@@ -44,7 +44,8 @@ main{
   padding: 25px 0px;
   align-items: end;
   background-image: url('src/assets/img/bgs/cave.jpg');
-  background-position: auto 400%;
+  background-position: 100% -25%;
+  background-size: contain;
   background-repeat: no-repeat;
 }
 

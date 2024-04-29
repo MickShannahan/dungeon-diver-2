@@ -128,7 +128,7 @@ class GameService {
   startNewRun() {
     const gameSave = new GameSave(AppState.player)
     AppState.gameSave = gameSave
-    const monsters = monsterPool.slice(0, 5)
+    const monsters = monsterPool
     AppState.monsters = monsters
     monstersService.spawnNextMonster()
   }
