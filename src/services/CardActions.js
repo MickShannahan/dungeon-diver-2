@@ -11,7 +11,7 @@ class CardActions {
    * @param {Action} payload
    */
   hurtPlayer(payload) {
-    logger.log('hurtPlayer')
+    logger.log('✨hurtPlayer')
     gameService.damagePlayer(payload.power)
   }
 
@@ -20,15 +20,16 @@ class CardActions {
   }
 
   hurtMonster(payload) {
-    logger.log('hurMonster')
+    logger.log('✨hurMonster')
   }
 
-  deckToHand(number) {
-    gameService.addCardsToHand(number)
+  deckToHand(payload) {
+    logger.log("✨deckToHand", payload.power)
+    gameService.addCardsToHand(payload.power)
   }
 
   addAbilityPower() {
-    logger.log('addAbilityPower')
+    logger.log('✨addAbilityPower')
   }
 
 }

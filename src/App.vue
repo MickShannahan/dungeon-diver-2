@@ -27,7 +27,8 @@ const cardWidth= ref('20ch')
     <!-- <CardInHand/> -->
     <footer class="bg-dark text-light">
     </footer>
-
+    <div class="scan-lines"></div>
+    <div class="screen-glow"></div>
     <audio id="sound-effect" src=""></audio>
     <audio id="bg-music" src=""></audio>
 </template>
@@ -39,5 +40,24 @@ const cardWidth= ref('20ch')
 :root{
   --card-height: min(27ch, 25vw);
   --card-width: min(20ch, 11vw);
+}
+
+.scan-lines{
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  opacity: .15;
+  pointer-events: none;
+  background-image: url(./assets/img/bgs/lines.png);
+  z-index: 10000;
+}
+.screen-glow{
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  opacity: .28;
+  pointer-events: none;
+  backdrop-filter: blur(7px) brightness(1.2);
+  z-index: 9999;
 }
 </style>
