@@ -15,11 +15,13 @@ import EnergyBar from './EnergyBar.vue';
   const deckHasCards = computed(()=> !!AppState.player.deck.length)
   const overDiscard = ref(false)
 
+
   watch(handLength, (newl, oldl)=>{
     if(newl > oldl) playSFX(SFX.drawCard)
   })
 
   function drawCard(){
+    if(AppState.player.hand.length == AppState.player.maxHandSize) return
     AppState.player.energy--
     gameService.addCardsToHand(1)
   }
@@ -44,12 +46,13 @@ import EnergyBar from './EnergyBar.vue';
 
     <section class="card-hand d-flex justify-content-center">
       <TransitionGroup name="cards">
-        <div v-for="card in hand" :key="card.id">
-          <Card :card="card"/>
+        <div v-for="(card, i) in hand" :key="card.id" >
+            <Card :card="card" :index="i"/>
         </div>
       </TransitionGroup>
 
     </section>
+    <section class="card-count tiny-font">{{hand.length}}/{{ AppState.player.maxHandSize }} <i class="mdi mdi-hand-back-left-outline"></i></section>
     <section class="w-100 row justify-content-between">
       <div class="col-5 col-md-4 col-lg-3 d-flex btn-group">
         <button class="btn btn-outline-primary d-flex align-items-center justify-content-center deck-count h-100">
@@ -61,10 +64,10 @@ import EnergyBar from './EnergyBar.vue';
           <div v-else class="text-danger">0</div>
           <div><i class="mdi mdi-cards-playing fs-4"></i></div>
         </button>
-        <button :disabled="!deckHasCards" @click="drawCard()" class="btn btn-outline-primary f-jacquard-i">Draw <i class="mdi mdi-cards-playing-diamond"></i><i class="mdi mdi-plus"></i></button>
+        <button :disabled="!deckHasCards" @click="drawCard()" class="btn btn-outline-primary f-jacquard-i">Draw <i class="mdi mdi-cards-playing-diamond"></i></button>
       </div>
 
-      <div class="col" v-if="AppState.player" >
+      <div class="col p-0" v-if="AppState.player" >
         <EnergyBar :energy="AppState.player.energy" :maxEnergy="AppState.player.maxEnergy" :restoring="overDiscard && cardInHand ? 1: 0"/>
       </div>
       <div class="col-5 col-md-4 col-lg-3 d-flex btn-group">
@@ -83,7 +86,7 @@ import EnergyBar from './EnergyBar.vue';
 .grid{
   display: grid;
   grid-template-columns: auto;
-  grid-template-rows:  auto auto;
+  grid-template-rows:  25ch 10px auto;
   place-items: center;
 }
 
@@ -91,9 +94,15 @@ import EnergyBar from './EnergyBar.vue';
   min-height: var(--card-height);
 }
 
+.card-count{
+  position: relative;
+  bottom: 1.8em;
+}
+
 .deck-count{
   overflow: visible;
 }
+
 
 .cards-move,
 .cards-enter-active,

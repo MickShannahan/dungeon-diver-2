@@ -1,6 +1,7 @@
 import { AppState } from "../AppState.js"
 import { Animation } from "../models/Animation.js"
 import { animate } from "../utils/animate.js"
+import { delay } from "../utils/delay.js"
 import { logger } from "../utils/Logger.js"
 import { playSFX } from "../utils/soundController.js"
 import { cardActions } from "./CardActions.js"
@@ -76,7 +77,7 @@ class MonstersService {
 
     } else { // player loses
       gameService.damagePlayer(1)
-      action.animation = new Animation('bounce', .2, 'linear', 0)
+      action.animation = new Animation('grow', .2, 'linear', 0)
       action.power = Math.ceil(action.power / 2)
       if (!monster.actions.length) {
         monster.actions.shift()
@@ -105,13 +106,12 @@ class MonstersService {
   }
 
 
-  monsterDied() {
+  async monsterDied() {
     AppState.currentMonster = null
 
-    gameService.drawNewHand()
-    setTimeout(() => {
-      this.spawnNextMonster()
-    }, 500)
+    await gameService.addCardsToHand(2)
+    await delay(500)
+    this.spawnNextMonster()
   }
 
 }

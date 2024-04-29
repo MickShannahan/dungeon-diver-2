@@ -8,26 +8,37 @@ import { playSFX } from '../utils/soundController.js';
 import fail from '../assets/sounds/fail.wav'
 
 
-const {card: cardProp} = defineProps({card: Card})
+const props = defineProps({card: Card, index: Number})
+const hand = computed(()=> AppState.player?.hand)
 const currentMonsterAction = computed(()=> AppState.currentMonster?.actions[0])
 const currentDamage = computed(()=>{
-  return AppState.currentMonster?.calcDamage(cardProp)
+  return AppState.currentMonster?.calcDamage(props.card)
 })
+const cardY = computed(()=>{
+  let up =Math.abs((props.index+1) - Math.round(hand.value.length/2))
+  return `${up *-10 - Math.random() *2}px`
+})
+
+const cardRot = computed(()=>{
+  let rot = Math.round(hand.value.length/2)- (props.index+1)
+  return `${rot * -2.5 - (Math.random()* .7)}deg`
+})
+
 const image = ref(null)
 const cardRef = ref(null)
 const holding = ref(false)
 
 function pickup(e){
-  // logger.log('⬆️', cardProp.name)
+  // logger.log('⬆️', props.card.name)
   holding.value = true
-  AppState.cardInHand = cardProp
+  AppState.cardInHand = props.card
 }
 
 function drop(e){
-  // logger.log('⬇️', cardProp.name)
+  // logger.log('⬇️', props.card.name)
   holding.value = false
   AppState.cardInHand = null
-if(AppState.player.energy < cardProp.cost) return failToPlay()
+if(AppState.player.energy < props.card.cost) return failToPlay()
 }
 
 function playCard(){
@@ -53,13 +64,14 @@ function failToPlay(){
     </div>
 
     <div class="rps-card" ref="cardRef" :class="{active: holding}"
-      v-pickup="{pickup, drop, dragElm: image, data: card}">
+    v-pickup="{pickup, drop, dragElm: image, data: card}">
       <div class="img-background" :style="`--bg: url(${card.background})`">
         <img :src="card.picture" :alt="`image of ${card.name}`">
       </div>
       <div class="power-cost-bar">
-        <kbd class="bg-danger text-light rounded-pill"><i class="mdi mdi-sword"></i>{{ card.power || 0 }}</kbd><kbd
-          class="bg-primary text-light" :class="{'border border-danger': card.cost > AppState.player.energy}"><i
+        <kbd v-if="card.power" class="bg-danger text-light rounded-pill"><i class="mdi mdi-sword"></i>{{ card.power || 0 }}</kbd>
+        <span v-else></span>
+        <kbd class="bg-primary text-light" :class="{'border border-danger': card.cost > AppState.player.energy}"><i
             class="mdi mdi-lightning-bolt"></i>{{ card.cost }}</kbd>
       </div>
       <div class="card-body text-center">
@@ -89,13 +101,15 @@ function failToPlay(){
     outline: 3px double var(--bs-light);
     outline-offset: -4px;
     margin-inline: max(-5px, -4vw);
+    bottom: v-bind(cardY);
     padding: $card-padding;
     transition: all .2s cubic-bezier(0.175, 0.885, 0.32, 1.75);
     cursor: grab;
+    transform: translateY(0px) rotate(v-bind(cardRot)) scale(1);
     &:hover, &.active{
       z-index: 10;
       margin-inline: 4px;
-      transform: translateY(-25px) scale(1.2);
+      transform: translateY(-35px) scale(1.25);
       box-shadow: 0px 3px 7px rgba(0, 0, 0, 0.5);
     }
     &.active{
@@ -125,9 +139,10 @@ function failToPlay(){
 
     .power-cost-bar{
       padding: 0px 5px;
-      margin-top: -10px;
+      margin-top: -1em;
       display: flex;
       justify-content: space-between;
+      font-size: 16px;
     }
 
 

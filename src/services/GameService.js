@@ -71,9 +71,12 @@ class GameService {
     AppState.player.energy -= card.cost
     card.actions.forEach(a => cardActions[a.action](a))
     if (card.type != 'other') monstersService.counterActions(card)
+    logger.log(card)
     const indexToRemove = AppState.player.hand.indexOf(card)
     AppState.player.hand.splice(indexToRemove, 1)
     AppState.player.discard.unshift(card)
+
+    if (AppState.player.energy <= 0) this.playerTurnEnd()
 
     if (card.type != 'other') {
       return card.power

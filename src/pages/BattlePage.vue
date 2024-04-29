@@ -23,8 +23,8 @@ onMounted(()=>{
 
 <template>
   <main >
-    <div class="container-md">
-      <section class="row justify-content-center">
+    <div class="container-fluid">
+      <section class="row justify-content-center duel-row">
         <div class="col-6 col-lg-5 px-3 px-lg-5 py-3">
           <Character/>
         </div>
@@ -46,5 +46,15 @@ main{
   background-image: url('src/assets/img/bgs/cave.jpg');
   background-position: 100% 400%;
   background-repeat: no-repeat;
+}
+
+.container-fluid{
+  place-content: center;
+  width: 100%;
+  max-width: 150ch;
+}
+
+.duel-row{
+  margin-bottom: -4.5dvh
 }
 </style>
