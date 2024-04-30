@@ -26,12 +26,12 @@ function damagePlayer(){
   AppState.player.health--
 }
 
-watch(energy, (newE, oldE)=>{
-  if (newE <= 0) {
-    logger.log('out of energy')
-    monstersService.monsterTakeTurn()
-  }
-})
+// watch(energy, (newE, oldE)=>{
+//   if (newE <= 0) {
+//     logger.log('out of energy')
+//     // monstersService.monsterTakeTurn()
+//   }
+// })
 
 watch(health, (newHealth, oldHealth)=>{
   if(oldHealth > newHealth){

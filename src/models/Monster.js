@@ -25,6 +25,17 @@ export class Monster extends Character {
 
   }
 
+  set health(value) {
+    this._health = value < 0 ? 0 : value
+    if (this._health == 0) {
+      logger.log('Player Died')
+    }
+  }
+
+  get health() {
+    return this._health
+  }
+
   calcDamage(attack) {
     const currentAction = this.actions[0]
     if (!currentAction) return 'no action'

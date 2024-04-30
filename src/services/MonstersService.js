@@ -101,7 +101,6 @@ class MonstersService {
   damageCurrentMonster(damage) {
     const monster = AppState.currentMonster
     monster.health -= damage
-    if (monster.health <= 0) monster.health = 0
     return monster.health
   }
 

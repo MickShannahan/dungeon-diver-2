@@ -17,9 +17,13 @@ export class Character {
     this.id = createId(name)
     this.name = name
     this.picture = picture
-    this.health = health
+    this._health = health
     this.maxHealth = health
-    this.energy = energy
+    this._energy = energy
     this.maxEnergy = energy
+  }
+
+  get healthPercent() {
+    return Math.round((this._health / this.maxHealth) * 100)
   }
 }

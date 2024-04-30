@@ -6,7 +6,8 @@ export const monsterPool = [
   new Monster({
     name: 'Thok',
     picture: 'src/assets/img/characters/DogToy.png',
-    health: 10
+    health: 50,
+    actionCount: 2
   }),
   new Monster({
     name: 'Razer',

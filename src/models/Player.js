@@ -2,6 +2,9 @@ import { starterDeck } from "../utils/cardPool.js";
 import { Animation } from "./Animation.js";
 import { Character } from "./Character.js";
 import { Card } from "./Card.js";
+import { logger } from "../utils/Logger.js";
+import { gameService } from "../services/GameService.js";
+import { monstersService } from "../services/MonstersService.js";
 
 
 
@@ -36,4 +39,24 @@ export class Player extends Character {
     this.deck.sort(() => Math.random() - .5)
     this.deck.sort(() => Math.random() - .5)
   }
+
+  get health() {
+    return this._health
+  }
+  set health(value) {
+    this._health = value < 0 ? 0 : value
+    if (this._health == 0) {
+      logger.log('[Player] Died')
+    }
+  }
+
+  get energy() { return this._energy }
+  set energy(value) {
+    this._energy = value < 0 ? 0 : value
+    if (this._energy == 0) {
+      logger.log('[Player] out of ⚡')
+      monstersService.monsterTakeTurn()
+    }
+  }
+
 }
