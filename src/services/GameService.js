@@ -76,9 +76,11 @@ class GameService {
     })
   }
 
-  passTurn() {
-    gameService.reshuffleDiscard()
-    monstersService.monsterTakeTurn()
+  async passTurn() {
+    await gameService.reshuffleDiscard()
+    await monstersService.monsterTakeTurn()
+    await this.resetAbilityPower()
+    await this.restoreEnergy(AppState.player.maxEnergy)
   }
 
   async playerTurnEnd() {

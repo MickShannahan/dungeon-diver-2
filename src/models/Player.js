@@ -59,7 +59,6 @@ export class Player extends Character {
     this._energy = value < 0 ? 0 : value
     if (this._energy == 0) {
       logger.log('[Player] out of ⚡')
-      monstersService.monsterTakeTurn()
     }
   }
   get hasEnergy() {

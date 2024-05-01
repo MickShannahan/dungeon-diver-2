@@ -34,6 +34,7 @@ class MonstersService {
   }
 
   async monsterTakeTurn() {
+    logger.log('monsterTakeTurn')
     const monster = AppState.currentMonster
     if (!monster.isAlive) return
     let actions = AppState.currentMonster.actions
@@ -47,7 +48,6 @@ class MonstersService {
     })
     await delay((400 * actions.length) + 300)
     actions.length = 0
-    logger.log('monsterTakeTurn')
     this.monsterPrepareTurn()
   }
 
