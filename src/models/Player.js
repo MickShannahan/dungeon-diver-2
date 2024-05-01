@@ -14,8 +14,8 @@ export class Player extends Character {
   /**
    *
    * @param {{
-   * handSize: [Number],
-   * maxHandSize: [Number],
+   * handSize: Number,
+   * maxHandSize: Number,
    * deck: Card[],
    * hand: Card[],
    * discard: Card[],
@@ -63,6 +63,10 @@ export class Player extends Character {
   }
   get hasEnergy() {
     return this._energy > 0
+  }
+
+  get handCount() {
+    return this.hand.length
   }
 
 }

@@ -55,6 +55,7 @@ class MonstersService {
     const monster = AppState.currentMonster
     const action = monster?.actions[0]
     const currentPower = AppState.player?.abilityPower
+    logger.log('couterAtction', card, action)
     logger.log('counterActions')
     if (!action) {
       this.monsterPrepareTurn()
@@ -69,7 +70,6 @@ class MonstersService {
 
     } else if (rpsOutcomes[card.type].includes(action.type)) { // player wins
       action.power -= card.power
-      let dealt = monster.health - card.power > 0 ? card.power : Math.abs(card.power - monster.health - card.power)
       monster.health -= card.power
       AppState.player.abilityPower += card.cost
 
@@ -88,7 +88,7 @@ class MonstersService {
       action.animation = new Animation('bounce', .2, 'linear', 0, () => {
         monster.removeAction(action)
       })
-      await delay(250)
+      await delay(300)
     }
 
   }
@@ -96,19 +96,12 @@ class MonstersService {
   /** @param {Card} card */
   async playCardAgainstMonster(card) {
     const monster = AppState.currentMonster
-    monster.health -= card.power
     await this.counterActions(card)
     return monster.health
   }
 
 
-  async monsterDied() {
-    AppState.currentMonster = null
 
-    await gameService.addCardsToHand(2)
-    await delay(500)
-    this.spawnNextMonster()
-  }
 
 }
 

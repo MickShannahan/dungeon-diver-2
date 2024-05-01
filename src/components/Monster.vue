@@ -49,8 +49,6 @@ function carPlayed(event, card){
 function monsterDied(){
   animate(monsterImage.value, 'dead', '.5s', 'linear')
   playSFX(flyAway)
-  setTimeout(()=> monstersService.monsterDied(), 600)
-
 }
 
 </script>

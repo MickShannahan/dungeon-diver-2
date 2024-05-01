@@ -13,6 +13,7 @@ import EnergyBar from './EnergyBar.vue';
   const handLength = computed(()=> AppState.player?.hand.length)
   const deck = computed(()=> AppState.player?.deck)
   const deckHasCards = computed(()=> !!AppState.player.deck.length)
+  const canDrawCards = computed(()=>  deckHasCards.value && AppState.player?.energy >= 0 && AppState.player?.handCount < AppState.player?.maxHandSize)
   const overDiscard = ref(false)
 
 
@@ -21,9 +22,8 @@ import EnergyBar from './EnergyBar.vue';
   })
 
   function drawCard(){
-    if(AppState.player.hand.length == AppState.player.maxHandSize) return
-    AppState.player.energy--
-    gameService.addCardsToHand(1)
+    if(AppState.player.hand.length == AppState.player.maxHandSize || AppState.player.energy <= 0) return
+    gameService.drawCard()
   }
 
   function passTurn(){
@@ -52,7 +52,7 @@ import EnergyBar from './EnergyBar.vue';
       </TransitionGroup>
 
     </section>
-    <section class="card-count tiny-font">{{hand.length}}/{{ AppState.player.maxHandSize }} <i class="mdi mdi-hand-back-left-outline"></i></section>
+    <section class="card-count tiny-font" :class="{'text-warning': AppState.player.handCount == AppState.player.maxHandSize}">{{hand.length}}/{{ AppState.player.maxHandSize }} <i class="mdi mdi-hand-back-left-outline"></i></section>
     <section class="w-100 row justify-content-between">
       <div class="col-5 col-md-4 col-lg-3 d-flex btn-group">
         <button class="btn btn-outline-primary d-flex align-items-center justify-content-center deck-count h-100">
@@ -64,7 +64,7 @@ import EnergyBar from './EnergyBar.vue';
           <div v-else class="text-danger">0</div>
           <div><i class="mdi mdi-cards-playing fs-4"></i></div>
         </button>
-        <button :disabled="!deckHasCards" @click="drawCard()" class="btn btn-outline-primary f-jacquard-i">Draw <i class="mdi mdi-cards-playing-diamond"></i></button>
+        <button :disabled="!canDrawCards" @click="drawCard()" class="btn btn-outline-primary f-jacquard-i">Draw <i class="mdi mdi-cards-playing-diamond"></i></button>
       </div>
 
       <div class="col p-0" v-if="AppState.player" >

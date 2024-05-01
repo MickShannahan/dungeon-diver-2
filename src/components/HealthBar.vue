@@ -39,6 +39,7 @@ watch(healthPercent, ()=>{
   overflow: hidden;
   position: relative;
   border: 1px solid var(--bs-light);
+  backdrop-filter: blur(10px);
   .bar{
     display: flex;
     align-items: center;

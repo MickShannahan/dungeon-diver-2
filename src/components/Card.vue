@@ -95,8 +95,8 @@ function failToPlay(){
     font-size: 13px;
     height: var(--card-height);
     aspect-ratio: 3/4;
-    background-color: rgba(190, 190, 190, 0.5);
-    backdrop-filter: blur(20px);
+    background-color: rgb(71, 71, 71);
+    // backdrop-filter: blur(20px);
     border-radius:$card-radius;
     outline: 3px double var(--bs-light);
     outline-offset: -4px;

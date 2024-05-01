@@ -28,7 +28,7 @@ export class Monster extends Character {
   set health(value) {
     this._health = value < 0 ? 0 : value
     if (this._health == 0) {
-      logger.log('Player Died')
+      logger.log('Monster Died')
     }
   }
 

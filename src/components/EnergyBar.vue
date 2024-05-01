@@ -40,6 +40,7 @@ const energyCost = computed(()=> {
     background-color: transparent;
     transition: all .1s linear;
     text-align: center;
+    backdrop-filter: blur(10px);
   }
 .energy-bubble{
   width: 20px;
@@ -49,6 +50,7 @@ const energyCost = computed(()=> {
   border: 1px solid var(--bs-light);
   background-color: transparent;
   border-radius: 4px;
+  backdrop-filter: blur(10px);
 }
 
   .filled{

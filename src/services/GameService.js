@@ -29,8 +29,10 @@ class GameService {
     let performed = card.actions.map(a => this.performCardAction(a))
     await Promise.all(performed)
     // check for monster death : end early
-    if (!monster.isAlive)
-      return await monstersService.spawnNextMonster()
+    if (!monster.isAlive) {
+      await monstersService.spawnNextMonster()
+      return this.restoreEnergy(AppState.player.maxEnergy)
+    }
 
     if (!monster.hasActions)
       await this.activatePlayerAbility()
@@ -40,12 +42,21 @@ class GameService {
 
     if (!monster.hasActions)
       await monstersService.monsterPrepareTurn()
-
   }
 
   /** @param {Action} action */
   async performCardAction(action) {
     await cardActions[action.action](action)
+  }
+
+  async playerTurnEnd() {
+    logger.log('player turn end')
+    await delay(300)
+    if (!AppState.currentMonster.isAlive)
+      return monstersService.spawnNextMonster()
+    await monstersService.monsterTakeTurn()
+    this.resetAbilityPower()
+    this.restoreEnergy(AppState.player.maxEnergy)
   }
 
   discardCard(card) {
@@ -83,14 +94,7 @@ class GameService {
     await this.restoreEnergy(AppState.player.maxEnergy)
   }
 
-  async playerTurnEnd() {
-    logger.log('player turn end')
-    await delay(300)
-    if (!AppState.currentMonster.isAlive)
-      return monstersService.spawnNextMonster()
-    monstersService.monsterTakeTurn()
-    this.resetAbilityPower()
-  }
+
 
   async activatePlayerAbility() {
     const player = AppState.player
@@ -113,6 +117,14 @@ class GameService {
     this.resolveActionOrder(card)
   }
 
+  async drawCard() {
+    const player = AppState.player
+    player.energy -= 1
+    await this.addCardsToHand(1)
+    if (!player.hasEnergy)
+      return this.playerTurnEnd()
+  }
+
   drawNewHand() {
     this.addCardsToHand(AppState.player.handSize)
   }
@@ -122,13 +134,13 @@ class GameService {
     // eslint-disable-next-line no-async-promise-executor
     return new Promise(async (resolve, reject) => {
       while (num--) {
-        setTimeout(() => {
+        delay(100 * num, () => {
           const card = AppState.player.deck.shift()
           if (!card) return
           AppState.player.hand.push(card)
-          resolve()
-        }, 100 * num)
+        })
       } (num)
+      resolve()
     })
   }
   reshuffleDiscard() {
