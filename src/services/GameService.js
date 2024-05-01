@@ -8,8 +8,46 @@ import { cardActions } from "./CardActions.js"
 import { monstersService } from "./MonstersService.js"
 import { delay } from "../utils/delay.js"
 import { Animation } from "../models/Animation.js"
+import { Action } from "../models/Action.js"
+import Monster from "../components/Monster.vue"
+
+
 
 class GameService {
+
+  /** @param {Card} card*/
+  async resolveActionOrder(card) {
+    // playCard
+    const player = AppState.player
+    const monster = AppState.currentMonster
+    // reduce energy
+    player.energy -= card.cost
+    // damage monster
+    if (card.type != 'other')
+      await monstersService.playCardAgainstMonster(card)
+    // perform card actions
+    let performed = card.actions.map(a => this.performCardAction(a))
+    await Promise.all(performed)
+    // check for monster death : end early
+    if (!monster.isAlive)
+      return await monstersService.spawnNextMonster()
+
+    if (!monster.hasActions)
+      await this.activatePlayerAbility()
+
+    if (!player.hasEnergy)
+      return this.playerTurnEnd()
+
+    if (!monster.hasActions)
+      await monstersService.monsterPrepareTurn()
+
+  }
+
+  /** @param {Action} action */
+  async performCardAction(action) {
+    await cardActions[action.action](action)
+  }
+
   discardCard(card) {
     const player = AppState.player
     let removed = player.hand.splice(player.hand.indexOf(card), 1)[0]
@@ -43,43 +81,34 @@ class GameService {
     monstersService.monsterTakeTurn()
   }
 
-  playerTurnEnd() {
-    if (!AppState.currentMonster) return
-    setTimeout(() => {
-      if (AppState.player.energy <= 0) {
-        monstersService.monsterTakeTurn()
-        this.resetAbilityPower()
-      }
-    }, 500)
+  async playerTurnEnd() {
+    logger.log('player turn end')
+    await delay(300)
+    if (!AppState.currentMonster.isAlive)
+      return monstersService.spawnNextMonster()
+    monstersService.monsterTakeTurn()
+    this.resetAbilityPower()
   }
 
   async activatePlayerAbility() {
-    const abilityPower = AppState.player.abilityPower || 0
+    const player = AppState.player
+    const abilityPower = player.abilityPower
+    logger.log('💥', abilityPower)
     if (!abilityPower) return
     await delay(100)
     AppState.player.abilityAnimation = new Animation('ability-right', .2, 'linear')
     await delay(200)
-    monstersService.damageCurrentMonster(abilityPower)
-    AppState.player.abilityPower = 0
-    monstersService.monsterPrepareTurn()
-
-    await delay(500)
+    AppState.currentMonster.health -= abilityPower
+    player.abilityPower = 0
+    await delay(200)
   }
 
   /** @param {Card} card */
   playCard(card) {
-    AppState.player.energy -= card.cost
-    card.actions.forEach(a => cardActions[a.action](a))
-    if (card.type != 'other') monstersService.counterActions(card)
     const indexToRemove = AppState.player.hand.indexOf(card)
     AppState.player.hand.splice(indexToRemove, 1)
     AppState.player.discard.unshift(card)
-
-    if (AppState.player.energy <= 0) this.playerTurnEnd()
-
-    if (card.type != 'other') {
-      return card.power
-    }
+    this.resolveActionOrder(card)
   }
 
   drawNewHand() {
@@ -101,7 +130,6 @@ class GameService {
     })
   }
   reshuffleDiscard() {
-    logger.log('reshuffling')
     const player = AppState.player
     this.resetAbilityPower()
     return new Promise((resolve, reject) => {

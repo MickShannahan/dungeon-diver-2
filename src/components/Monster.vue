@@ -41,7 +41,7 @@ watch(monsterHealth, (newHealth, oldHealth)=>{
  * @param { Card } card
  */
 function carPlayed(event, card){
-  logger.log(card)
+  logger.log('🫳',card.name, card.type)
   if(AppState.player.energy < card.cost) return
   gameService.playCard(card)
 }

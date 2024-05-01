@@ -50,6 +50,10 @@ export class Player extends Character {
     }
   }
 
+  get isAlive() {
+    return this._health > 0
+  }
+
   get energy() { return this._energy }
   set energy(value) {
     this._energy = value < 0 ? 0 : value
@@ -57,6 +61,9 @@ export class Player extends Character {
       logger.log('[Player] out of ⚡')
       monstersService.monsterTakeTurn()
     }
+  }
+  get hasEnergy() {
+    return this._energy > 0
   }
 
 }

@@ -45,7 +45,6 @@ watch(health, (newHealth, oldHealth)=>{
 })
 
 function playCard(event, card){
-  if(card.type == 'other')
   if(AppState.player.energy < card.cost) return
   gameService.playCard(card)
 }
