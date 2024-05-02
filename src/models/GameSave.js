@@ -1,5 +1,6 @@
 import { createId } from "../utils/GenerateId.js"
 import { Card } from './Card.js'
+import { Settings } from "./Settings.js"
 
 
 export class GameSave {
@@ -10,5 +11,6 @@ export class GameSave {
     this.money = data.money || 0
     this.deck = data.deck ? data.deck.map(d => new Card(d)) : []
     this.cardPool = data.cardPool ? data.cardPool.map(c => new Card(c)) : []
+    this.settings = data.settings ? new Settings(data.settings) : new Settings()
   }
 }

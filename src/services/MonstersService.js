@@ -30,6 +30,7 @@ class MonstersService {
   }
 
   monsterPrepareTurn() {
+    logger.log('preparing next turn')
     AppState.currentMonster.prepareActions()
   }
 
@@ -55,8 +56,7 @@ class MonstersService {
     const monster = AppState.currentMonster
     const action = monster?.actions[0]
     const currentPower = AppState.player?.abilityPower
-    logger.log('couterAtction', card, action)
-    logger.log('counterActions')
+    logger.log('counterActions [', card.type, 'vs', action.type + ']')
     if (!action) {
       this.monsterPrepareTurn()
     }

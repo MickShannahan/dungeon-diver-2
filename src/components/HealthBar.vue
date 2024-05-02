@@ -24,6 +24,8 @@ watch(healthPercent, ()=>{
 <section class="health-container my-1">
   <div class="bar text-dark" :class="`bg-light ${direction}`" :style="{width: `${delayPercent}%`}"> </div>
   <div class="bar text-dark" :class="`bg-${color} ${direction}`" :style="{width:`${healthPercent > 100 ? 100 : healthPercent}%`}">
+  </div>
+  <div :class="`health-number  ${direction}`" :style="{'max-width':`${healthPercent > 100 ? 100 : healthPercent}%`}">
     {{ currentHealth || 0 }}
   </div>
 
@@ -44,7 +46,6 @@ watch(healthPercent, ()=>{
     display: flex;
     align-items: center;
     justify-content: end;
-    padding: 5px;
     height: 100%;
     position: absolute;
     top: 0;
@@ -53,10 +54,20 @@ watch(healthPercent, ()=>{
   .left{
     left: 0;
     justify-content: end;
+    text-align: right;
   }
   .right{
     right: 0;
     justify-content: start;
+    text-align: left
+  }
+
+  .health-number{
+    min-width: 4ch;
+    padding-inline: .5ch;
+    color: var(--bs-light);
+    mix-blend-mode: difference;
+    filter: contrast(0.25);
   }
 }
 </style>

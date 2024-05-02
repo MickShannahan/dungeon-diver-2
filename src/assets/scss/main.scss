@@ -27,6 +27,8 @@ body {
   min-height: calc(100dvh - 4px);
   height: 100%;
   transform: perspective(100em) rotateX(3deg) translateY(-7px);
+  border-radius: 4.5dvw;
+  overflow: hidden;
   // transform-style: preserve-3d;
 }
 
@@ -35,7 +37,6 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 4.5dvw;
   background-color: var(--bs-page);
   box-shadow: inset 0px 0px 15px rgba(151, 210, 229, 0.1);
 }

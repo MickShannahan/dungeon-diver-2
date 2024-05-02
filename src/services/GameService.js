@@ -30,6 +30,7 @@ class GameService {
     await Promise.all(performed)
     // check for monster death : end early
     if (!monster.isAlive) {
+      delay(100)
       await monstersService.spawnNextMonster()
       return this.restoreEnergy(AppState.player.maxEnergy)
     }
@@ -40,8 +41,9 @@ class GameService {
     if (!player.hasEnergy)
       return this.playerTurnEnd()
 
-    if (!monster.hasActions)
+    if (!monster.hasActions) {
       await monstersService.monsterPrepareTurn()
+    }
   }
 
   /** @param {Action} action */
