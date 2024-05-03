@@ -1,7 +1,12 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { gameService } from './services/GameService.js';
 import { logger } from './utils/Logger.js';
+import Navbar from './components/Navbar.vue'
+import { AppState } from './AppState.js';
+import { Settings } from './models/Settings.js';
+
+const settings = computed(()=> AppState.gameSave?.settings || new Settings())
 
 
 onMounted(()=>{
@@ -22,13 +27,14 @@ const cardWidth= ref('20ch')
 
 <template>
     <header>
+      <Navbar/>
     </header>
     <RouterView/>
     <!-- <CardInHand/> -->
     <footer class="bg-dark text-light">
     </footer>
-    <div class="scan-lines"></div>
-    <div class="screen-glow"></div>
+    <div v-if="settings.scanLines" class="scan-lines"></div>
+    <div v-if="settings.screenGlow" class="screen-glow"></div>
     <audio id="sound-effect" src=""></audio>
     <audio id="bg-music" src=""></audio>
 </template>
