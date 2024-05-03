@@ -1,4 +1,4 @@
-import { starterDeck } from "../utils/cardPool.js";
+import { starterDeck } from "../data/cardPool.js";
 import { Animation } from "./Animation.js";
 import { Character } from "./Character.js";
 import { Card } from "./Card.js";

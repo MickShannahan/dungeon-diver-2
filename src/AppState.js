@@ -3,6 +3,7 @@ import { Card } from './models/Card.js'
 import { Player } from './models/Player.js'
 import { Monster } from './models/Monster.js'
 import { GameSave } from './models/GameSave.js'
+import { Stage } from './models/Stage.js'
 
 // NOTE AppState is a reactive object to contain app level data
 export const AppState = reactive({
@@ -51,6 +52,9 @@ export const AppState = reactive({
       flavor: 'just a scissors'
     })
   ],
+
+  /** @type  {Stage} */
+  currentStage: null,
 
   /** @type {Monster[]} */
   monsters: [],

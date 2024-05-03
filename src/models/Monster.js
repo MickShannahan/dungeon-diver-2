@@ -1,5 +1,5 @@
 import { rpsOutcomes } from "../services/MonstersService.js";
-import { startingAttackPool } from "../utils/attackPool.js";
+import { startingAttackPool } from "../data/attackPool.js";
 import { logger } from "../utils/Logger.js";
 import { randomArr } from "../utils/Random.js";
 import { Action } from "./Action.js";

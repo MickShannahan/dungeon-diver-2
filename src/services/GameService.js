@@ -3,13 +3,15 @@ import { AppState } from "../AppState.js"
 import { Card } from "../models/Card.js"
 import { GameSave } from "../models/GameSave.js"
 import { logger } from "../utils/Logger.js"
-import { monsterPool } from "../utils/monsterPool.js"
+import { monsterPool } from "../data/monsterPool.js"
 import { cardActions } from "./CardActions.js"
 import { monstersService } from "./MonstersService.js"
 import { delay } from "../utils/delay.js"
 import { Animation } from "../models/Animation.js"
 import { Action } from "../models/Action.js"
 import Monster from "../components/Monster.vue"
+import { stage1 } from "../data/stagePool.js"
+import { stagesService } from "./stagesService.js"
 
 
 
@@ -170,9 +172,7 @@ class GameService {
   startNewRun() {
     const gameSave = new GameSave(AppState.player)
     AppState.gameSave = gameSave
-    const monsters = monsterPool
-    AppState.monsters = monsters
-    monstersService.spawnNextMonster()
+    stagesService.changeStage(stage1)
   }
 
   gotToMap() {
