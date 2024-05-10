@@ -22,6 +22,7 @@ export class Monster extends Character {
     this.actionCount = data.actionCount || 1
     this.actionPool = data.actionPool || startingAttackPool
     this.actions = data.actions || []
+    this.animation = data.animation || 'bounce 1.5s ease-out infinite'
 
   }
 

@@ -17,31 +17,37 @@ import { stagesService } from "./stagesService.js"
 
 class GameService {
 
-  /** @param {Card} card*/
+  /** @param {Card} [card]*/
   async resolveActionOrder(card) {
     // playCard
     const player = AppState.player
     const monster = AppState.currentMonster
-    // reduce energy
-    player.energy -= card.cost
-    // damage monster
-    if (card.type != 'other')
-      await monstersService.playCardAgainstMonster(card)
-    // perform card actions
-    let performed = card.actions.map(a => this.performCardAction(a))
-    await Promise.all(performed)
+    if (card) {
+      // reduce energy
+      player.energy -= card.cost
+      // damage monster
+      if (card.type != 'other')
+        await monstersService.playCardAgainstMonster(card)
+      // perform card actions
+      let performed = card.actions.map(a => this.performCardAction(a))
+      await Promise.all(performed)
+
+
+      if (!monster.hasActions)
+        await this.activatePlayerAbility()
+
+    }
+
     // check for monster death : end early
     if (!monster.isAlive) {
-      delay(100)
-      await monstersService.spawnNextMonster()
+      await delay(350)
+      await
+        await monstersService.spawnNextMonster()
       return this.restoreEnergy(AppState.player.maxEnergy)
     }
 
-    if (!monster.hasActions)
-      await this.activatePlayerAbility()
-
-    if (!player.hasEnergy)
-      return this.playerTurnEnd()
+    // if (!player.hasEnergy)
+    //   return this.playerTurnEnd()
 
     if (!monster.hasActions) {
       await monstersService.monsterPrepareTurn()
@@ -62,6 +68,7 @@ class GameService {
     this.resetAbilityPower()
     this.restoreEnergy(AppState.player.maxEnergy)
   }
+
 
   discardCard(card) {
     const player = AppState.player
@@ -91,14 +98,18 @@ class GameService {
     })
   }
 
-  async passTurn() {
-    await gameService.reshuffleDiscard()
-    await monstersService.monsterTakeTurn()
-    await this.resetAbilityPower()
+  async startPlayerTurn() {
+    this.addCardsToHand(1)
     await this.restoreEnergy(AppState.player.maxEnergy)
   }
 
-
+  async passTurn() {
+    const player = AppState.player
+    // player.discard.push(...player.hand.splice(0))
+    // await gameService.reshuffleDiscard()
+    await monstersService.monsterTakeTurn()
+    await this.resetAbilityPower()
+  }
 
   async activatePlayerAbility() {
     const player = AppState.player
@@ -125,8 +136,7 @@ class GameService {
     const player = AppState.player
     player.energy -= 1
     await this.addCardsToHand(1)
-    if (!player.hasEnergy)
-      return this.playerTurnEnd()
+    await this.resolveActionOrder()
   }
 
   drawNewHand() {

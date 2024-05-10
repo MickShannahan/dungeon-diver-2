@@ -21,6 +21,8 @@ export const rpsOutcomes = {
 class MonstersService {
 
   async spawnNextMonster() {
+    AppState.currentMonster = null
+    await delay(100)
     const monster = AppState.monsters.shift()
     logger.log('✨👹', monster)
     if (!monster) return gameService.gotToMap()
@@ -39,15 +41,16 @@ class MonstersService {
     const monster = AppState.currentMonster
     if (!monster.isAlive) return
     let actions = AppState.currentMonster.actions
+    actions.forEach(a => a.animation = new Animation('grow', .2))
     actions.forEach((a, i) => {
-      setTimeout(() => {
+      delay(400 * (i + 1), async () => {
         cardActions[a.action](a)
         a.animation = new Animation('shoot-left', .3, 'ease', .1, () => {
           AppState.currentMonster.removeCurrentAction()
         })
-      }, 400 * (i + 1))
+      })
     })
-    await delay((400 * actions.length) + 300)
+    await delay((500 * actions.length) + 300)
     actions.length = 0
     this.monsterPrepareTurn()
   }

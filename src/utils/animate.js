@@ -17,6 +17,7 @@ export async function animate(elm, animation, duration = '.5s', timing = 'linear
  */
 export function playAnimation(elm, anime) {
   return new Promise((resolve, reject) => {
+    elm.classList.add(anime.name + '-end')
     elm.style.animation = `${anime.name} ${anime.duration} ${anime.delay} ${anime.timing} 1 forwards`
     elm.addEventListener('animationend', () => {
       elm.style.animation = 'none'

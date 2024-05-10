@@ -75,7 +75,7 @@ import EnergyBar from './EnergyBar.vue';
           <div>{{ AppState.player?.discard.length }}</div>
           <div><i class="mdi mdi-grave-stone fs-4"></i></div>
         </button>
-        <button @click="passTurn()" class="btn btn-outline-danger f-jacquard-i">pass <i class="mdi mdi-arrow-right-bottom"></i></button>
+        <button @click="passTurn()" class="btn btn-outline-danger f-jacquard-i" :class="{'highlight march': !AppState.player.energy}">pass <i class="mdi mdi-arrow-right-bottom" style="--march-height: -20px;"></i></button>
       </div>
     </section>
   </div>
@@ -101,6 +101,23 @@ import EnergyBar from './EnergyBar.vue';
 
 .deck-count{
   overflow: visible;
+}
+
+.march{
+  transform: translateX(-5px);
+  animation-direction: alternate-reverse;
+  animation-timing-function: ease;
+}
+
+.btn-outline-danger.highlight{
+
+  background-color: var(--bs-danger);
+  color: var(--bs-light);
+  // animation: text-march 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.5) infinite;
+}
+
+.text-glow{
+  animation: text-glow 1.5s ease-out alternate infinite;
 }
 
 

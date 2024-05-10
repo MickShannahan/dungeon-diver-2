@@ -9,5 +9,6 @@ export class Settings {
     this.scanLines = data.scanLines ? data.scanLines : true
     this.screenGlow = data.screenGlow ? data.screenGlow : true
     this.warpedScreen = data.warpedScreen ? data.warpedScreen : true
+    this.hideMonster = false
   }
 }

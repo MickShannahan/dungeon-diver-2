@@ -25,10 +25,10 @@ onMounted(()=>{
   <main >
     <div class="container-fluid">
       <section class="row justify-content-center duel-row">
-        <div class="col-6 col-lg-5 px-3 px-lg-5 py-3">
+        <div class="col-6 col-lg-5 px-3 px-lg-4 py-3">
           <Character/>
         </div>
-        <div class="col-6 col-lg-5 px-3 px-lg-5 py-3">
+        <div class="col-6 col-lg-5 px-3 px-lg-4 py-3">
           <Monster/>
         </div>
       </section>
